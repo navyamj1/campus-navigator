@@ -68,7 +68,7 @@ Folder Structure
 
 ### Project Demo
 # Video
-https://drive.google.com/file/d/1dmKukEotMkUjMhp0DATY7iJbldkY41m7/view?usp=drive_link
+https://drive.google.com/file/d/1xLdqIlofAZ5DOLVace6WXCc6ZICNTze9/view?usp=drive_link
 
 ## Team Contributions
 Major contributions:
