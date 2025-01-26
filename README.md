@@ -14,13 +14,13 @@
 [mention your project hosted project link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+The project aims to create a webpage that helps users (students, faculty , visitors)locate specific events happening on campus as well as navigate to the main campus locations. It serves as a digital campus guide with event management and location-search capabilities.
 
 ### The Problem statement
-[What ridiculous problem are you solving?]
+Develop a webpage that helps users locate events happening on campus and find key campus locations such as libraries and cafeterias. The system integrates an interactive map, a search feature, and a database to manage event and location information, providing a seamless navigation experience.
 
 ### The Solution
-[How are you solving it? Keep it fun!]
+The solution involves creating a user-friendly interface using HTML, CSS, and JavaScript for event and location search, coupled with an interactive map using Leaflet.js and OpenStreetMap. A Flask backend communicates with a MySQL database to store and retrieve event and location details, ensuring efficient navigation and real-time updates for users.
 
 ## Technical Details
 ### Technologies/Components Used
@@ -29,18 +29,15 @@ For Software:
 - Frameworks used: Flask 
 - Tools used : MySQL,Geoman-Leaflet,OpenStreetMap
 
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
-
 ### Implementation
 For Software:
 # Installation
-[commands]
+General requirements: Python, MySQL
+Backend installation: Flask, MySQL Connector
 
 # Run
-[commands]
+Mysql: create database ,create table, insert into table,view data.
+To run flask app : python app.py
 
 ### Project Documentation
 For Software:
@@ -58,15 +55,6 @@ For Software:
 # Diagrams
 ![Workflow](Add your workflow/architecture diagram here)
 *Add caption explaining your workflow*
-
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
 
 # Build Photos
 ![Team](Add photo of your team here)
@@ -90,9 +78,10 @@ For Hardware:
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
-
+Major contributions:
+- Niharika S: Frontend - HTML,CSS, JavaScript
+- Navya M J: Backend using Flask, MySql database
+- Nayana M : Backend using Flask, MySql database
+All members contributed to building each part of the project.
 ---
 Made with ❤️ at TinkerHub
