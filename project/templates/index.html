@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Navigation Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-geoman-free/dist/leaflet-geoman.css" />
+  <style>
+    /* Same styles as before */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    .leaflet-control-container {
+      display: none !important;
+    }
+
+    #side-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    #side-panel button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 15px;
+      margin: 10px 0;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #side-panel button:hover {
+      background-color: #555;
+    }
+
+    #search-bar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.95); 
+  border-radius: 25px;
+  padding: 8px 15px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+#search-bar input {
+  padding: 8px 12px; 
+  font-size: 16px;
+  width: 300px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+  color: #333; 
+}
+
+#search-bar input:focus {
+  outline: none;
+}
+
+#search-bar input::placeholder {
+  font-size: 14px;
+}
+
+/* Hover effect for the search bar */
+#search-bar:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+}
+
+
+    #search-results {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      width: 300px;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+
+    #search-results div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    #search-results div:hover {
+      background-color: #f0f0f0;
+    }
+
+    #reset-button {
+      background-color: rgba(0, 0, 255, 0.7);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      z-index: 1001;
+      cursor: pointer;
+      display: none; /* Initially hidden */
+      position: absolute;
+      top: 10px; 
+      right: 20px;
+    }
+
+    #events-content {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #events-content div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #events-content div:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Side Panel -->
+  <div id="side-panel">
+    <button id="search-option">Search</button>
+    <button id="events-option">Events</button>
+    
+    <div id="events-content" style="display: none;">
+      
+    </div>
+  </div>
+
+  <!-- Map and other content -->
+  <div id="search-bar" class="search-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
+      <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+    </svg>
+    <input type="text" id="search-input" placeholder="Search campus locations">
+  </div>
+  <div id="search-results"></div>
+  <button id="reset-button" onclick="resetMapView()">Reset Map View</button> 
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-geoman-free/dist/leaflet-geoman.min.js"></script>
+  <script>
+    // Initial coordinates and zoom level
+    const initialCoords = [8.545999827498012, 76.90639433955722];
+    const initialZoom = 18;
+
+    const map = L.map('map').setView(initialCoords, initialZoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 22
+    }).addTo(map);
+
+    let markers = [];
+
+    async function fetchLocations() {
+      try {
+        const response = await fetch('/locations');
+        const locations = await response.json();
+        return locations;
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+        return [];
+      }
+    }
+
+    async function fetchPrograms() {
+  try {
+    const response = await fetch('/programs');
+    const programs = await response.json();
+    console.log('Programs fetched:', programs); // Check if the new program is here
+    return programs;
+  } catch (error) {
+    console.error('Error fetching programs:', error);
+    return [];
+  }
+}
+
+
+    async function addMarkers() {
+  const locations = await fetchLocations();
+  markers = locations.map(location => {
+    const marker = L.marker([location.latitude, location.longitude])
+      .addTo(map)
+      .bindPopup(`<b>${location.place}</b>`);  
+    return { ...location, marker };
+  });
+}
+    function showSearchResults(query) {
+      const results = markers.filter(loc =>
+        loc.place.toLowerCase().includes(query.toLowerCase())
+      );
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      results.forEach(result => {
+        const resultDiv = document.createElement('div');
+        resultDiv.textContent = result.place;
+        resultDiv.onclick = () => {
+          map.flyTo([result.latitude, result.longitude], 20);
+          result.marker.openPopup();
+          document.getElementById('reset-button').style.display = 'block';  // Show reset button when a place is selected
+        };
+        resultsContainer.appendChild(resultDiv);
+      });
+      resultsContainer.style.display = results.length > 0 ? 'block' : 'none';
+    }
+
+    addMarkers();
+
+    document.getElementById('search-input').addEventListener('input', function (e) {
+      const query = e.target.value;
+      if (query) {
+        showSearchResults(query);
+      } else {
+        document.getElementById('search-results').style.display = 'none';
+      }
+    });
+
+    // Reset map view function
+    function resetMapView() {
+      map.setView(initialCoords, initialZoom); // Reset to initial coordinates and zoom
+      map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+          layer.closePopup(); // Close any open popups
+        }
+      });
+      document.getElementById('search-input').value = ''; // Clear search input
+      document.getElementById('search-results').style.display = 'none'; // Hide search results
+      document.getElementById('reset-button').style.display = 'none'; // Hide reset button
+    }
+
+    // Show programs on "Events" button click
+    document.getElementById('events-option').addEventListener('click', async function () {
+      const programs = await fetchPrograms();
+      const eventsContainer = document.getElementById('events-content');
+      eventsContainer.innerHTML = '';  // Clear previous events
+     
+      // Check if we got the programs
+      if (programs.length === 0) {
+        eventsContainer.innerHTML = '<div>No events found.</div>';
+      } else {
+        programs.forEach(program => {
+          const programDiv = document.createElement('div');
+          programDiv.textContent = `${program.program} (${program.time})`;
+          programDiv.onclick = () => {
+            // Show program location on map
+            const programMarker = L.marker([program.latitude, program.longitude]).addTo(map);
+            programMarker.bindPopup(`<b>${program.program}</b><br>${program.venue}`).openPopup();
+            map.flyTo([program.latitude, program.longitude], 20);
+          };
+          eventsContainer.appendChild(programDiv);
+        });
+      }
+
+      document.getElementById('events-content').style.display = 'block';
+      document.getElementById('search-bar').style.display = 'none';  // Hide search bar
+    });
+
+    // Toggle visibility for search and events content
+    document.getElementById('search-option').addEventListener('click', function() {
+      document.getElementById('search-bar').style.display = 'block';  // Show search bar
+      document.getElementById('events-content').style.display = 'none'; // Hide events content
+    });
+
+  </script>  
+
+</body>
+</html>
