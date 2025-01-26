@@ -41,44 +41,37 @@ To run flask app : python app.py
 
 ### Project Documentation
 For Software:
+Features
+Interactive Map: Displays campus locations using Leaflet.
+Location Search: Allows users to search for specific locations within the campus.
+Event Listings: Displays events with details such as name, venue, and time.
+Dynamic Markers: Interactive markers for locations and events on the map.
+Map Reset: A button to reset the map view to its initial state.
+Responsive Design: Works seamlessly on various devices.
 
 # Screenshots (Add at least 3)
-![image](https://github.com/user-attachments/assets/9c66dbe6-cf38-4e59-b879-4dbb973f13c7)
+![webstite](https://github.com/user-attachments/assets/dcb9f569-ed17-42f3-b199-65cc6a1ff0e1)
+The page displays a map with College of Engineering,Trivandrum as its centre.
 
-*Add caption explaining what this shows*
+![search_location](https://github.com/user-attachments/assets/135fb079-4492-4dd1-b0d6-38b94d06cb88)
+When we search for a location, a marker pointing to the location pops up.
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
-
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+![event_locator](https://github.com/user-attachments/assets/d6cee59f-0b81-4349-8e7e-ccd88dd26d4a)
+The list of events scheduled is displayed in the side-panel. When we click on an event, the venue pops up in the map.
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+![image](https://github.com/user-attachments/assets/fb7fef42-4b2e-48f8-9d2a-b1d58a0a8a80)
+Folder Structure
 
 # Build Photos
 ![Team](Add photo of your team here)
-
-
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
 
 ### Project Demo
 # Video
 [Add your demo video link here]
 *Explain what the video demonstrates*
 
-# Additional Demos
-[Add any extra demo materials/links]
-
-## Team Contributions
++-## Team Contributions
 Major contributions:
 - Niharika S: Frontend - HTML,CSS, JavaScript
 - Navya M J: Backend using Flask, MySql database
