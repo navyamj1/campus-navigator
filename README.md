@@ -68,10 +68,9 @@ Folder Structure
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+https://drive.google.com/file/d/1dmKukEotMkUjMhp0DATY7iJbldkY41m7/view?usp=drive_link
 
-+-## Team Contributions
+## Team Contributions
 Major contributions:
 - Niharika S: Frontend - HTML,CSS, JavaScript
 - Navya M J: Backend using Flask, MySql database
