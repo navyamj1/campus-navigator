@@ -43,7 +43,8 @@ To run flask app : python app.py
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
+![image](https://github.com/user-attachments/assets/9c66dbe6-cf38-4e59-b879-4dbb973f13c7)
+
 *Add caption explaining what this shows*
 
 ![Screenshot2](Add screenshot 2 here with proper name)
