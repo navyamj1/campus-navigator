@@ -216,24 +216,29 @@
     return { ...location, marker };
   });
 }
-    function showSearchResults(query) {
-      const results = markers.filter(loc =>
-        loc.place.toLowerCase().includes(query.toLowerCase())
-      );
-      const resultsContainer = document.getElementById('search-results');
-      resultsContainer.innerHTML = '';
-      results.forEach(result => {
-        const resultDiv = document.createElement('div');
-        resultDiv.textContent = result.place;
-        resultDiv.onclick = () => {
-          map.flyTo([result.latitude, result.longitude], 20);
-          result.marker.openPopup();
-          document.getElementById('reset-button').style.display = 'block';  // Show reset button when a place is selected
-        };
-        resultsContainer.appendChild(resultDiv);
-      });
-      resultsContainer.style.display = results.length > 0 ? 'block' : 'none';
-    }
+function showSearchResults(query) {
+  const results = markers.filter(loc =>
+    loc.place.toLowerCase().includes(query.toLowerCase())
+  );
+  const resultsContainer = document.getElementById('search-results');
+  resultsContainer.innerHTML = '';
+  results.forEach(result => {
+    const resultDiv = document.createElement('div');
+    resultDiv.textContent = result.place;
+    resultDiv.onclick = () => {
+      map.flyTo([result.latitude, result.longitude], 20);
+      result.marker.openPopup();
+
+      // Hide the search results and search bar
+      resultsContainer.style.display = 'none';
+      document.getElementById('search-input').value = ''; // Clear input
+      document.getElementById('reset-button').style.display = 'block'; // Show reset button
+    };
+    resultsContainer.appendChild(resultDiv);
+  });
+  resultsContainer.style.display = results.length > 0 ? 'block' : 'none';
+}
+
 
     addMarkers();
 
