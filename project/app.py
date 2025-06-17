@@ -3,15 +3,15 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Database configuration
+
 db_config = {
-    "host": "localhost",
-    "user": "root",
-    "password": "Nayana@123",
-    "database": "campus_navigation1"
+    "host":os.environ["DB_HOST"],
+    "user": os.environ["DB_USER"],
+    "password": os.environ["DB_PASSWORD"],
+    "database": os.environ["DB_NAME"]
 }
 
-# Fetch all locations
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -21,7 +21,7 @@ def get_locations():
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
         
-        # Fetch all locations from the database
+        
         cursor.execute("SELECT name AS place, latitude, longitude FROM location1")
         locations = cursor.fetchall()
         
@@ -30,15 +30,15 @@ def get_locations():
     except mysql.connector.Error as err:
         return jsonify({"error": str(err)}), 500
 
-# Search for a specific location
+
 @app.route('/search', methods=['GET'])
 def search_location():
-    query = request.args.get('q', '')  # Get the search query
+    query = request.args.get('q', '') 
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
         
-        # Search for locations by name
+
         cursor.execute(
             "SELECT name AS place, latitude, longitude FROM location1 WHERE name LIKE %s",
             (f"%{query}%",)
@@ -55,15 +55,15 @@ def get_programs():
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT program, time, venue, latitude, longitude FROM programs")  # Adjust query if needed
+        cursor.execute("SELECT program, time, venue, latitude, longitude FROM programs")  
         programs = cursor.fetchall()
 
-        print("Programs fetched:", programs)  # Log the fetched programs for debugging
+        print("Programs fetched:", programs)  
 
         conn.close()
         return jsonify(programs)
     except mysql.connector.Error as err:
-        print("Error fetching programs:", err)  # Log any errors
+        print("Error fetching programs:", err) 
         return jsonify({"error": str(err)}), 500
 
 if __name__ == '__main__':
